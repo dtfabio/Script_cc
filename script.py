@@ -3,18 +3,22 @@ import csv
 import sys
 import os 
 
-try:
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    card_file=sys.argv[1]
-    file = open(dir_path + "/Input/" + sys.argv[1])
-    bintxt = open(dir_path + "/bin.txt")
+def readerfile(input, dir_path):
+    file = open(dir_path + "/Input/" + input)
     filelist=[]
-    binlist=[]
-    for line2 in bintxt.readlines():
-        binlist.append(line2.replace('\n',''))
     for line in file.readlines():
         filelist.append(line.replace('\n',''))
+    return filelist
 
+def readerbin(dir_path):
+    bintxt = open(dir_path + "/bin.txt")
+    binlist=[]
+    for line in bintxt.readlines():
+        binlist.append(line.replace('\n',''))
+    return binlist
+
+def checkbin(filelist, binlist):
+    dir_path = os.path.dirname(os.path.realpath(__file__))
     with open(dir_path + "/Output/card_report.csv", 'w') as out_file:                   
         writer = csv.writer(out_file)
         writer.writerow(('Card Number', 'Expiry Date (Month)', 'Expiry Date (Year)', 'CVV', 'Holder', 'Bank'))
@@ -24,7 +28,13 @@ try:
                 if(fileitem[0:6]==binitem):
                     card = fileitem.split("|")      
                     writer.writerow(card)
-        print("Completed.")
+
+try:
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    filelist=readerfile(sys.argv[1], dir_path)
+    binlist=readerbin(dir_path)
+    checkbin(filelist, binlist)
+    print("Completed.")
 except:
     print("Error.")
 
