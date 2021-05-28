@@ -31,11 +31,13 @@ def checkbin_pb(filelist, binlist, dir_path):
 def checkbin_src(filelist, binlist, dir_path):
     with open(dir_path + "/Output/raw_with_bin.csv", 'w') as out_file:                   
         write = csv.writer(out_file)        
+        write.writerow(('Bin found', 'Raw with Bin'))
+        lista=[]
         for fileitem in filelist:
             for binitem in binlist:
-                if binitem in fileitem:
+                if binitem in fileitem:            
                     card = fileitem.split("\n") 
-                    write.writerow(card)
+                    write.writerow((binitem, card))
 
 try:
     dir_path = os.path.dirname(os.path.realpath(__file__))
